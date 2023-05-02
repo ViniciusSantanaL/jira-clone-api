@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,8 +25,13 @@ public class SecurityConfiguration {
 
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationService authenticationService;
+
+    private final CORSConfiguration configuration;
+
     @Autowired
-    public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter, AuthenticationService authenticationService) {
+    public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter,
+                                 AuthenticationService authenticationService, CORSConfiguration configuration) {
+        this.configuration = configuration;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.authenticationService = authenticationService;
     }
@@ -33,6 +39,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
         http.csrf().disable()
+                .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
