@@ -30,7 +30,6 @@ public class DefaultErrorHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<FieldErrorValidationResponse>> handleBeanValidation(MethodArgumentNotValidException ex) {
         List<FieldError> errors = ex.getFieldErrors();

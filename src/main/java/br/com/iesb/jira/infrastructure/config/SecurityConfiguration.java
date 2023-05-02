@@ -5,18 +5,20 @@ import br.com.iesb.jira.infrastructure.security.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -26,12 +28,8 @@ public class SecurityConfiguration {
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationService authenticationService;
 
-    private final CORSConfiguration configuration;
-
     @Autowired
-    public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter,
-                                 AuthenticationService authenticationService, CORSConfiguration configuration) {
-        this.configuration = configuration;
+    public SecurityConfiguration(JWTAuthenticationFilter jwtAuthenticationFilter, AuthenticationService authenticationService) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.authenticationService = authenticationService;
     }
@@ -39,10 +37,11 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
         http.csrf().disable()
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .requestMatchers("/api/v1/sign-up").permitAll()
                     .requestMatchers("/api/v1/recover-password").permitAll()
                     .requestMatchers("/api/v1/auth").permitAll()
