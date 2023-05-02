@@ -1,6 +1,8 @@
 package br.com.iesb.jira.application.incoming.auth.controller;
 
+import br.com.iesb.jira.application.incoming.auth.commons.converter.AuthenticationConverter;
 import br.com.iesb.jira.application.incoming.auth.commons.request.AuthenticationRequest;
+import br.com.iesb.jira.application.incoming.auth.commons.response.AuthenticateResponse;
 import br.com.iesb.jira.domain.user.model.User;
 import br.com.iesb.jira.infrastructure.exception.NotHaveAccessException;
 import br.com.iesb.jira.infrastructure.security.service.TokenService;
@@ -33,7 +35,7 @@ public class AuthenticationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> authenticate(@RequestBody @Valid AuthenticationRequest request) {
+    public AuthenticateResponse authenticate(@RequestBody @Valid AuthenticationRequest request) {
         Authentication authenticate = null;
         try {
             authenticate =  authenticationManager.authenticate(
@@ -44,6 +46,6 @@ public class AuthenticationController {
 
         final User user = (User) authenticate.getPrincipal();
 
-        return ResponseEntity.ok(tokenService.generateToken(user));
+        return AuthenticationConverter.toResponse(tokenService.generateToken(user));
     }
 }

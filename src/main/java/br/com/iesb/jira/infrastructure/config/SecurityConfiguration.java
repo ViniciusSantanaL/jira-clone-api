@@ -37,6 +37,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/v1/sign-up").permitAll()
+                    .requestMatchers("/api/v1/recover-password").permitAll()
                     .requestMatchers("/api/v1/auth").permitAll()
                     .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
