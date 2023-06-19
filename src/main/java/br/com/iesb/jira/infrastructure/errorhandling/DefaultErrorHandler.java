@@ -2,6 +2,7 @@ package br.com.iesb.jira.infrastructure.errorhandling;
 
 import br.com.iesb.jira.infrastructure.exception.BusinessException;
 import br.com.iesb.jira.infrastructure.exception.EntityDuplicatedException;
+import br.com.iesb.jira.infrastructure.exception.EntityNotFoundException;
 import br.com.iesb.jira.infrastructure.exception.NotHaveAccessException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -39,6 +40,11 @@ public class DefaultErrorHandler {
     @ExceptionHandler(EntityDuplicatedException.class)
     public ResponseEntity<MessageResponse> handleDuplicatedEntity(EntityDuplicatedException ex) {
         return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<MessageResponse> handleEntityNotFound(EntityNotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(NotHaveAccessException.class)

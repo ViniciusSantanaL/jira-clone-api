@@ -20,7 +20,6 @@ public class SingUpConverter {
         signUpResponse.setUserUsername(userVO.username());
         signUpResponse.setUserEmail(userVO.userEmail());
         signUpResponse.setUserStatus(userVO.userStatus());
-        System.out.println(userVO.username());
         return signUpResponse;
     }
 }

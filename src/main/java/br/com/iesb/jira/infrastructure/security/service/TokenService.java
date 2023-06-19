@@ -15,14 +15,15 @@ import java.util.function.Function;
 @Service
 public class TokenService {
     private final String SECRET_KEY = "586E3272357538782F413F4428472B4B6250655368566B597033733676397924";
-    private final Integer EXPIRATION_TOKEN = 1000 * 60 * 24;
+    private final Integer EXPIRATION_TOKEN = 1000 * 60 * 60 * 24;
 
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .claim("authorities", userDetails.getAuthorities())
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis() + EXPIRATION_TOKEN))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TOKEN))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

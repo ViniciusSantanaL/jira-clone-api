@@ -18,8 +18,8 @@ import java.util.UUID;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, unique = true)
     private UUID id;
 
     @Column(name = "username", unique = true, nullable = false)
@@ -50,6 +50,10 @@ public class User implements UserDetails {
     }
 
     public User(){}
+
+    public User(UUID id){
+        this.id = id;
+    }
 
     public String getUserUsername() {
         return userUsername;
@@ -132,5 +136,15 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.userStatus.equals(UserStatus.ACTIVE);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userUsername='" + userUsername + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userStatus=" + userStatus +
+                '}';
     }
 }

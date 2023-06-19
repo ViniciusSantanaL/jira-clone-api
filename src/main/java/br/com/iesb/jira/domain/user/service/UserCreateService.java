@@ -7,7 +7,6 @@ import br.com.iesb.jira.domain.user.vo.builder.UserBuilder;
 import br.com.iesb.jira.infrastructure.exception.EntityDuplicatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ public class UserCreateService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public UserCreateService(UserRepository userRepository, PasswordEncoder  passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
