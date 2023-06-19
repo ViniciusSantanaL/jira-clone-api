@@ -2,13 +2,9 @@ package br.com.iesb.jira.infrastructure.utils.validation;
 
 import java.util.UUID;
 
-public abstract class BaseValidation {
+public abstract class BaseValidation<T> {
 
-    private final UUID id;
-
-    protected BaseValidation(UUID id) {
-        this.id = id;
-    }
+    private UUID id;
 
     public UUID getId() {
         return id;

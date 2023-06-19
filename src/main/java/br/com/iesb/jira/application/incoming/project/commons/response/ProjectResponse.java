@@ -13,6 +13,8 @@ import java.util.UUID;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record ProjectResponse(UUID projectId,
                               String projectName,
+
+                              UUID teamId,
                               LocalDate projectCreateDate,
                               Set<TeamUserResponse> projectUsers,
                               Set<ProjectSprintResponse> projectSprints) {

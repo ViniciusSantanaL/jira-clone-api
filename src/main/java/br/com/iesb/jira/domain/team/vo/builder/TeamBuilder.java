@@ -1,10 +1,12 @@
 package br.com.iesb.jira.domain.team.vo.builder;
 
+import br.com.iesb.jira.domain.project.vo.ProjectVO;
 import br.com.iesb.jira.domain.team.model.Team;
 import br.com.iesb.jira.domain.team.vo.TeamVO;
 import br.com.iesb.jira.domain.user.model.User;
 import br.com.iesb.jira.domain.user.vo.UserVO;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +22,7 @@ public class TeamBuilder {
         Team team = new Team();
         team.setTeamName(teamVO.teamName());
         team.setUsers(new HashSet<>(users));
+        team.setProjects(Collections.emptySet());
         return team;
     }
 
@@ -27,6 +30,9 @@ public class TeamBuilder {
         Set<UserVO> usersVO = team.getUsers().stream()
                 .map(u -> new UserVO(u.getId(), u.getUsername(), u.getUserEmail()))
                 .collect(Collectors.toSet());
-        return new TeamVO(team.getId(),team.getTeamName(), usersVO);
+        Set<ProjectVO> projectsVO = team.getProjects().stream()
+                .map(p -> new ProjectVO(p.getId(), p.getProjectName()))
+                .collect(Collectors.toSet());
+        return new TeamVO(team.getId(),team.getTeamName(), usersVO, projectsVO);
     }
 }

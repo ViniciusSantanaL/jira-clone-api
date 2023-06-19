@@ -1,5 +1,6 @@
 package br.com.iesb.jira.domain.team.model;
 
+import br.com.iesb.jira.domain.project.model.Project;
 import br.com.iesb.jira.domain.user.model.User;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,6 +26,10 @@ public class Team {
             fetch = FetchType.LAZY)
     private Set<User> users;
 
+    @OneToMany(mappedBy = "team",cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE },
+            fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Project> projects;
+
     @LastModifiedDate
     @Column(name = "last_modification_date", nullable = false)
     private LocalDateTime lastModificationDate;
@@ -40,6 +45,14 @@ public class Team {
 
     public LocalDateTime getLastModificationDate() {
         return lastModificationDate;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 
     public Long getVersion() {

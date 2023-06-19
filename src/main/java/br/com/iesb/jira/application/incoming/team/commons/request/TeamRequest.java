@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
@@ -15,5 +16,6 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record TeamRequest(
         @NotBlank String teamName,
-        @NotNull @Valid Set<TeamUserRequest> teamUsers) {
+        @NotNull @Size(min = 1) @Valid Set<TeamUserRequest> teamUsers,
+        @NotNull  @Valid Set<TeamProjectRequest> teamProjects) {
 }

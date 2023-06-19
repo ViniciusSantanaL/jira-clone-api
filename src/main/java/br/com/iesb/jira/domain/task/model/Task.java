@@ -28,7 +28,7 @@ public class Task {
     @Column(name = "task_title", nullable = false)
     private String taskTitle;
 
-    @Column(name = "task_description", nullable = false)
+    @Column(name = "task_description")
     private String taskDescription;
 
     @Column(name = "task_status", nullable = false)
@@ -51,11 +51,11 @@ public class Task {
     private Sprint sprint;
 
     @OneToMany(mappedBy = "task",cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE },
-            fetch = FetchType.LAZY)
+            fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Comment> comments;
 
     @OneToMany(mappedBy = "task", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE },
-            fetch = FetchType.LAZY)
+            fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Subtask> subtasks;
 
     @LastModifiedDate

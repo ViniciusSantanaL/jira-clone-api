@@ -9,5 +9,8 @@ import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record TeamResponse(UUID teamId, String teamName, Set<TeamUserResponse> teamUsers) {
+public record TeamResponse(UUID teamId,
+                           String teamName,
+                           Set<TeamUserResponse> teamUsers,
+                           Set<TeamProjectResponse> teamProjects) {
 }

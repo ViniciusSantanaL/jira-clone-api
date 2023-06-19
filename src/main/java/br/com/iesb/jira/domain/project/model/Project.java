@@ -1,6 +1,7 @@
 package br.com.iesb.jira.domain.project.model;
 
 import br.com.iesb.jira.domain.sprint.model.Sprint;
+import br.com.iesb.jira.domain.team.model.Team;
 import br.com.iesb.jira.domain.user.model.User;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -34,6 +35,11 @@ public class Project {
             fetch = FetchType.LAZY)
     private Set<User> users;
 
+    @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "project_team_fk"), nullable = false)
+    private Team team;
+
     @LastModifiedDate
     @Column(name = "last_modification_date", nullable = false)
     private LocalDateTime lastModificationDate;
@@ -49,6 +55,14 @@ public class Project {
 
     public LocalDateTime getLastModificationDate() {
         return lastModificationDate;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public Long getVersion() {

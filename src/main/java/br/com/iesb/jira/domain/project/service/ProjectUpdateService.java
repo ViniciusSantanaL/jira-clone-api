@@ -7,6 +7,8 @@ import br.com.iesb.jira.domain.project.vo.ProjectVO;
 import br.com.iesb.jira.domain.project.vo.builder.ProjectBuilder;
 import br.com.iesb.jira.domain.sprint.model.Sprint;
 import br.com.iesb.jira.domain.sprint.repository.SprintRepository;
+import br.com.iesb.jira.domain.team.model.Team;
+import br.com.iesb.jira.domain.team.repository.TeamRepository;
 import br.com.iesb.jira.domain.user.model.User;
 import br.com.iesb.jira.domain.user.repository.UserRepository;
 import br.com.iesb.jira.domain.user.vo.UserVO;
@@ -19,6 +21,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectUpdateService {
@@ -27,17 +30,23 @@ public class ProjectUpdateService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
 
+    private final TeamRepository teamRepository;
+
     private final SprintRepository sprintRepository;
 
-    public ProjectUpdateService(ProjectRepository projectRepository, UserRepository userRepository, SprintRepository sprintRepository) {
+    public ProjectUpdateService(ProjectRepository projectRepository, UserRepository userRepository, TeamRepository teamRepository, SprintRepository sprintRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.teamRepository = teamRepository;
         this.sprintRepository = sprintRepository;
     }
 
     public ProjectVO updateProjectById(final ProjectVO projectVO) {
         Project projectToSave = projectRepository.findById(projectVO.id())
                 .orElseThrow(() -> new EntityNotFoundException("project", "project_id"));
+
+        Team teamToSave = teamRepository.findById(projectVO.teamId())
+                .orElseThrow(() -> new EntityNotFoundException("team", "team_id"));
 
         Set<User> projectUsersToSave = Collections.emptySet();
         Set<Sprint> projectSprintsToSave = Collections.emptySet();
@@ -50,6 +59,7 @@ public class ProjectUpdateService {
         projectToSave.setProjectCreateDate(projectVO.projectCreateDate());
         projectToSave.setUsers(projectUsersToSave);
         projectToSave.setSprints(projectSprintsToSave);
+        projectToSave.setTeam(teamToSave);
         Project projectSaved = saveProject(projectToSave);
 
         return ProjectBuilder.createProjectVO(projectSaved);
@@ -60,7 +70,9 @@ public class ProjectUpdateService {
             List<UUID> sprintsVOId = projectVO.sprints().stream().map(ProjectSprintVO::sprintId).toList();
             List<Sprint> sprints = sprintRepository.findAllById(sprintsVOId);
 
-            EntityValidation.validateIfEntityExist(sprintsVOId, sprints, "sprint");
+            EntityValidation.validateIfEntityExist(sprintsVOId,
+                    sprints.stream().map(Sprint::getId).collect(Collectors.toSet()),
+                    "sprint");
 
             projectSprintsToSave = new HashSet<>(sprints);
 
@@ -73,7 +85,9 @@ public class ProjectUpdateService {
             List<UUID> usersVOId = projectVO.users().stream().map(UserVO::userId).toList();
             List<User> users = userRepository.findAllById(usersVOId);
 
-            EntityValidation.validateIfEntityExist(usersVOId, users, "users");
+            EntityValidation.validateIfEntityExist(usersVOId,
+                    users.stream().map(User::getId).collect(Collectors.toSet()),
+                    "users");
 
             projectUsersToSave = new HashSet<>(users);
         }

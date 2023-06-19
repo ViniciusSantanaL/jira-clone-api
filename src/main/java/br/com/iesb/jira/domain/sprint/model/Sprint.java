@@ -35,7 +35,7 @@ public class Sprint {
     private Project project;
 
     @OneToMany(mappedBy = "sprint", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE },
-            fetch = FetchType.LAZY)
+            fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Task> tasks;
 
     @LastModifiedDate

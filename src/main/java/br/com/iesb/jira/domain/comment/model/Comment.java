@@ -17,7 +17,7 @@ public class Comment {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "comment_description")
+    @Column(name = "comment_description", nullable = false)
     private String commentDescription;
 
     @ManyToOne

@@ -18,6 +18,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SprintUpdateService {
@@ -46,7 +47,9 @@ public class SprintUpdateService {
             List<UUID> sprintTasksVOId = sprintVO.sprintTasksVO().stream().map(SprintTaskVO::taskId).toList();
             List<Task> sprintTasks = taskRepository.findAllById(sprintTasksVOId);
 
-            EntityValidation.validateIfEntityExist(sprintTasksVOId, sprintTasks, "task");
+            EntityValidation.validateIfEntityExist(sprintTasksVOId,
+                    sprintTasks.stream().map(Task::getId).collect(Collectors.toSet()),
+                    "task");
 
             sprintTasksToSave = new HashSet<>(sprintTasks);
         }

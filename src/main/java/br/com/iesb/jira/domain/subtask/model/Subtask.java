@@ -18,7 +18,8 @@ public class Subtask {
     private UUID id;
 
     @Column(name = "substask_title", nullable = false)
-    private String subTasktitle;
+    private String subtaskTitle;
+
     @Column(name = "subtask_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private SubtaskStatus subtaskStatus;
@@ -49,12 +50,12 @@ public class Subtask {
         return version;
     }
 
-    public String getSubTasktitle() {
-        return subTasktitle;
+    public String getSubtaskTitle() {
+        return subtaskTitle;
     }
 
-    public void setSubTasktitle(String subTasktitle) {
-        this.subTasktitle = subTasktitle;
+    public void setSubtaskTitle(String subtaskTitle) {
+        this.subtaskTitle = subtaskTitle;
     }
 
     public SubtaskStatus getSubtaskStatus() {

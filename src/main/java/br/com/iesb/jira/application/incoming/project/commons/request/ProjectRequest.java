@@ -10,12 +10,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Set;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ProjectRequest(
         @NotBlank String projectName,
+        @NotNull UUID teamId,
         @NotNull @Valid Set<TeamUserRequest> projectUsers,
         @NotNull @Valid Set<ProjectSprintRequest> projectSprints) {
 }

@@ -24,8 +24,7 @@ public class ProjectConverter {
         Set<UserVO> usersVO = request.projectUsers().stream()
                 .map(u -> new UserVO(u.userId()))
                 .collect(Collectors.toSet());
-
-        return new ProjectVO(request.projectName(), usersVO);
+        return new ProjectVO(request.projectName(), usersVO, request.teamId());
     }
 
     public static ProjectVO of(final UUID projectId, final ProjectRequest request) {
@@ -37,7 +36,7 @@ public class ProjectConverter {
                 .map(u -> new ProjectSprintVO(u.sprintId()))
                 .collect(Collectors.toSet());
 
-        return new ProjectVO(projectId,request.projectName(), null ,usersVO, sprintsVO);
+        return new ProjectVO(projectId,request.projectName(), request.teamId(),null ,usersVO, sprintsVO);
     }
 
     public static ProjectResponse toResponse(ProjectVO projectVO) {
@@ -49,7 +48,7 @@ public class ProjectConverter {
                 .map(s -> new ProjectSprintResponse(s.sprintId(), s.projectCode()))
                 .collect(Collectors.toSet());
 
-        return new ProjectResponse(projectVO.id(), projectVO.projectName(),
+        return new ProjectResponse(projectVO.id(), projectVO.projectName(), projectVO.teamId(),
                 projectVO.projectCreateDate(), projectUsers, projectSprints);
     }
 
@@ -62,7 +61,7 @@ public class ProjectConverter {
                 .map(s -> new ProjectSprintResponse(s.getId(), s.getSprintCode()))
                 .collect(Collectors.toSet());
 
-        return new ProjectResponse(project.getId(), project.getProjectName(),
+        return new ProjectResponse(project.getId(), project.getProjectName(), project.getTeam().getId(),
                 project.getProjectCreateDate(), projectUsers, projectSprints);
     }
 }

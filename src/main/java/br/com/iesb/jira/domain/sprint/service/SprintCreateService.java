@@ -30,7 +30,7 @@ public class SprintCreateService {
         Project project = projectRepository.findById(sprintVO.sprintProjectId())
                 .orElseThrow(() -> new EntityNotFoundException("project", "project_id"));
 
-        Integer sprintCode = sprintRepository.fetchSizeSprintByProjectId(project.getId());
+        Integer sprintCode = sprintRepository.fetchSizeSprintByProjectId(project.getId()) + 1;
 
         Sprint sprint = saveSprint(SprintBuilder.create(sprintVO,sprintCode, project));
         LOGGER.info("createSprint, Sprint: {}", sprint);

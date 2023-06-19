@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamUpdateService {
@@ -39,7 +40,9 @@ public class TeamUpdateService {
         List<UUID> usersVOId = teamVO.users().stream().map(UserVO::userId).toList();
         List<User> teamUsers = userRepository.findAllById(usersVOId);
 
-        EntityValidation.validateIfEntityExist(usersVOId, teamUsers, "users");
+        EntityValidation.validateIfEntityExist(usersVOId,
+                teamUsers.stream().map(User::getId).collect(Collectors.toSet()),
+                "users");
 
         teamToSave.setUsers(new HashSet<>(teamUsers));
         Team teamSaved = saveTeam(teamToSave);

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamCreateService {
@@ -33,7 +34,9 @@ public class TeamCreateService {
         List<UUID> usersVOId = teamVO.users().stream().map(UserVO::userId).toList();
         List<User> users = userRepository.findAllById(usersVOId);
 
-        EntityValidation.validateIfEntityExist(usersVOId, users, "team");
+        EntityValidation.validateIfEntityExist(usersVOId,
+                users.stream().map(User::getId).collect(Collectors.toSet()),
+                "team");
 
         Team team = saveTeam(TeamBuilder.create(teamVO, users));
         LOGGER.info("createTeam, Team: {}", team);
