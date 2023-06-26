@@ -7,12 +7,10 @@ import br.com.iesb.jira.application.incoming.auth.controller.api.AuthenticationA
 import br.com.iesb.jira.domain.user.model.User;
 import br.com.iesb.jira.infrastructure.exception.NotHaveAccessException;
 import br.com.iesb.jira.infrastructure.security.service.TokenService;
-import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,6 +37,6 @@ public class AuthenticationController implements AuthenticationApi {
 
         final User user = (User) authenticate.getPrincipal();
 
-        return AuthenticationConverter.toResponse(tokenService.generateToken(user));
+        return AuthenticationConverter.toResponse(user,tokenService.generateToken(user));
     }
 }

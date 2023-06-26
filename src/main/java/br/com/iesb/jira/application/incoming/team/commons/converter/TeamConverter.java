@@ -36,7 +36,7 @@ public class TeamConverter {
         return new TeamVO(teamId,request.teamName(), usersVO, projectsVO);
     }
 
-    public static TeamResponse toResponse(TeamVO teamVO) {
+    public static TeamResponse toResponse(final TeamVO teamVO) {
         Set<TeamUserResponse> teamUsers = teamVO.users().stream()
                 .map(u -> new TeamUserResponse(u.userId(), u.username(), u.userEmail()))
                 .collect(Collectors.toSet());
@@ -46,7 +46,7 @@ public class TeamConverter {
         return new TeamResponse(teamVO.id(), teamVO.teamName(), teamUsers, projectResponse);
     }
 
-    public static TeamResponse toResponse(Team team) {
+    public static TeamResponse toResponse(final Team team) {
         Set<TeamUserResponse> teamUsers = team.getUsers().stream()
                 .map(u -> new TeamUserResponse(u.getId(), u.getUserUsername(), u.getUserEmail()))
                 .collect(Collectors.toSet());
