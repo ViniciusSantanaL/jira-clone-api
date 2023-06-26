@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-@RequestMapping(name = "/api/v1/users")
+@RequestMapping("/api/v1/users")
 @RestController
 public class UserFetchController implements UserFetchApi {
     private final UserFetchService userFetchService;
